@@ -46,13 +46,13 @@ if ${EXTRACT_KERNEL}; then
     ${SRC_ROOT}/system/tools/mkbootimg/unpack_bootimg.py \
         --boot_img "${DUMP}/boot.img" \
         --out "${TMP_DIR}/boot.out" > /dev/null
-    cp -f "${TMP_DIR}/boot.out/kernel" "${MY_DIR}/kernel"
-    echo "  - kernel ($(stat -c%s "${MY_DIR}/kernel") bytes)"
+    cp -f "${TMP_DIR}/boot.out/kernel" "${MY_DIR}/Image"
+    echo "  - Image ($(stat -c%s "${MY_DIR}/Image") bytes)"
 fi
 
 ### DTBs
-rm -rf "${MY_DIR}/dtb"
-mkdir "${MY_DIR}/dtb"
+rm -rf "${MY_DIR}/dtbs"
+mkdir "${MY_DIR}/dtbs"
 
 echo "Extracting vendor_boot image..."
 ${SRC_ROOT}/system/tools/mkbootimg/unpack_bootimg.py \
@@ -66,11 +66,11 @@ fi
 
 python3 "${TMP_DIR}/extract_dtb.py" "${TMP_DIR}/vendor_boot.out/dtb" -o "${TMP_DIR}/dtb" > /dev/null
 find "${TMP_DIR}/dtb" -type f -name "*.dtb" \
-    -exec cp {} "${MY_DIR}/dtb" \; \
-    -exec printf "  - dtb/" \; \
+    -exec cp {} "${MY_DIR}/dtbs" \; \
+    -exec printf "  - dtbs/" \; \
     -exec basename {} \;
-cp -f "${DUMP}/dtbo.img" "${MY_DIR}/dtbo.img"
-echo "  - dtbo.img"
+cp -f "${DUMP}/dtbo.img" "${MY_DIR}/dtbs/dtbo.img"
+echo "  - dtbs/dtbo.img"
 
 ### Modules
 for MODULE_FOLDER in "${MODULE_FOLDERS[@]}"; do
